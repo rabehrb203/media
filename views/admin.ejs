@@ -1,113 +1,153 @@
-﻿<!DOCTYPE html>
-<html>
+﻿<!DOCTYPE html >
+<html dir="rtl" lang="ar" class="h-full bg-gray-100">
   <head>
     <title>لوحة التحكم بالشاشات</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
       body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        direction: rtl;
+          font-family: 'Tajawal', sans-serif;
       }
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
+      .gradient-bg {
+          background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
       }
-      .screen-list {
-        list-style: none;
-        padding: 0;
+      .media-preview {
+          transition: all 0.3s ease;
       }
-      .screen-item {
-        padding: 10px;
-        margin: 5px 0;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+      .media-preview:hover {
+          transform: scale(1.05);
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
       }
-      .form-group {
-        margin-bottom: 15px;
+      .fade-in {
+          animation: fadeIn 0.5s ease-in-out;
       }
-      .btn {
-        background: #007bff;
-        color: white;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
+      @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
       }
-      .btn:hover {
-        background: #0056b3;
-      }
-      .table-responsive {
-        margin-top: 20px;
-      }
-      .table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      .table th, .table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-      }
-      .form-select {
-        width: 100%;
-        padding: 5px;
-      }
-    </style>
+  </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    
   </head>
   <body>
-    <div class="container">
-      <h1>لوحة التحكم بالشاشات</h1>
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="min-h-screen">
+  
 
-      <h2>إضافة شاشة جديدة</h2>
-      <form action="/admin/screen" method="POST">
-        <div class="form-group">
-          <label for="id">معرف الشاشة:</label>
-          <input type="text" id="id" name="id" required />
-        </div>
-        <div class="form-group">
-          <label for="orientation">اتجاه الشاشة:</label>
-          <select id="orientation" name="orientation">
-            <option value="horizontal">أفقي</option>
-            <option value="vertical">عمودي</option>
-          </select>
-        </div>
-        <button type="submit" class="btn">إضافة شاشة</button>
-      </form>
+      <div class="container mx-auto px-4 py-8">
+          <!-- Add New Screen Card -->
+          <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8 fade-in">
+              <div class="p-6">
+                  <div class="flex items-center mb-4">
+                      <div class="bg-indigo-100 p-2 rounded-full mr-3">
+                          <i class="fas fa-plus text-indigo-600"></i>
+                      </div>
+                      <h2 class="text-xl font-semibold text-gray-800">إضافة شاشة جديدة</h2>
+                  </div>
+                  
+                  <form class="space-y-4">
+                      <div>
+                          <label for="screen-id" class="block text-sm font-medium text-gray-700 mb-1">معرف الشاشة</label>
+                          <input type="text" id="screen-id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="أدخل معرف الشاشة" required>
+                      </div>
+                      
+                      <div>
+                          <label for="orientation" class="block text-sm font-medium text-gray-700 mb-1">اتجاه الشاشة</label>
+                          <select id="orientation" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                              <option value="horizontal">أفقي</option>
+                              <option value="vertical">عمودي</option>
+                          </select>
+                      </div>
+                      
+                      <button type="submit" class="w-full gradient-bg text-white py-2 px-4 rounded-lg hover:opacity-90 transition flex items-center justify-center space-x-2 space-x-reverse">
+                          <i class="fas fa-plus"></i>
+                          <span>إضافة شاشة</span>
+                      </button>
+                  </form>
+              </div>
+          </div>
 
-      <h2>قائمة الشاشات</h2>
-      <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>معرف الشاشة</th>
-              <th>الاتجاه</th>
-              <th>عنوان IP</th>
-              <th>تاريخ الإنشاء</th>
-              <th>الإجراءات</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% screens.forEach(function(screen) { %>
-              <tr>
-                <td><%= screen.id %></td>
-                <td>
-                  <select class="form-select orientation-select" data-screen-id="<%= screen.id %>">
-                    <option value="horizontal" <%= screen.orientation === 'horizontal' ? 'selected' : '' %>>أفقي</option>
-                    <option value="vertical" <%= screen.orientation === 'vertical' ? 'selected' : '' %>>عمودي</option>
-                  </select>
-                </td>
-                <td><%= screen.ip || 'غير متصل' %></td>
-                <td><%= screen.created_at %></td>
-                <td>
-                  <a href="/admin/screen/<%= screen.id %>" class="btn btn-primary btn-sm">إدارة المحتوى</a>
-                </td>
-              </tr>
-            <% }); %>
-          </tbody>
-        </table>
+          <!-- Screens List -->
+          <div class="bg-white rounded-xl shadow-md overflow-hidden fade-in">
+              <div class="p-6">
+                  <div class="flex items-center justify-between mb-6">
+                      <div class="flex items-center">
+                          <div class="bg-indigo-100 p-2 rounded-full mr-3">
+                              <i class="fas fa-desktop text-indigo-600"></i>
+                          </div>
+                          <h2 class="text-xl font-semibold text-gray-800">قائمة الشاشات</h2>
+                      </div>
+                      <div class="relative">
+                          <input type="text" placeholder="بحث..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                          <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+                      </div>
+                  </div>
+
+                  <div class="overflow-x-auto">
+                      <table class="min-w-full divide-y divide-gray-200">
+                          <thead class="bg-gray-50">
+                              <tr>
+                                  <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">معرف الشاشة</th>
+                                  <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الاتجاه</th>
+                                  <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">عنوان IP</th>
+                                  <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">تاريخ الإنشاء</th>
+                                  <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الإجراءات</th>
+                              </tr>
+                          </thead>
+                          <tbody class="bg-white divide-y divide-gray-200">
+                            <% screens.forEach(function(screen) { %>
+                              <tr class="hover:bg-gray-50 transition">
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                      <div class="flex items-center">
+                                          <div class="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                                              <i class="fas fa-desktop text-indigo-600"></i>
+                                          </div>
+                                          <%= screen.id %>
+                                      </div>
+                                  </td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <select class="orientation-select bg-gray-100 border border-gray-300 text-gray-700 py-1 px-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" data-screen-id="<%= screen.id %>">
+                                      <option value="horizontal" <%= screen.orientation === 'horizontal' ? 'selected' : '' %>>أفقي</option>
+                                      <option value="vertical" <%= screen.orientation === 'vertical' ? 'selected' : '' %>>عمودي</option>
+                                    </select>
+                                  </td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                      <% if(screen.ip) { %>
+                                          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                              <i class="fas fa-wifi mr-1"></i>
+                                              <%= screen.ip %>
+                                          </span>
+                                      <% } else { %>
+                                          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                              <i class="fas fa-unlink mr-1"></i>
+                                              غير متصل
+                                          </span>
+                                      <% } %>
+                                  </td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                      <div class="flex items-center">
+                                          <i class="far fa-calendar-alt text-gray-400 mr-1"></i>
+                                          <%= screen.created_at %>
+                                      </div>
+                                  </td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                      <a href="/admin/screen/<%= screen.id %>" class="text-indigo-600 hover:text-indigo-900 mr-3">
+                                          <i class="fas fa-edit mr-1"></i> إدارة المحتوى
+                                      </a>
+                                    
+                                  </td>
+                              </tr>
+                              <% }); %>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
       </div>
-    </div>
-
+  </div>
     <script>
       document.querySelectorAll('.orientation-select').forEach(select => {
         select.addEventListener('change', async function() {
