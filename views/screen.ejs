@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>إدارة محتوى الشاشة</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        direction: rtl;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .media-list {
+        list-style: none;
+        padding: 0;
+      }
+      .media-item {
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      .btn {
+        background: #007bff;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .btn:hover {
+        background: #0056b3;
+      }
+      .preview {
+        max-width: 200px;
+        max-height: 200px;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="/admin" class="btn">العودة للقائمة الرئيسية</a>
+      <h1>إدارة محتوى الشاشة <%= screen.id %></h1>
+      <p>
+        <strong>الاتجاه:</strong> <%= screen.orientation %><br />
+        <strong>IP:</strong> <%= screen.ip || 'غير متصل' %>
+      </p>
+
+      <h2>إضافة محتوى جديد</h2>
+      <form action="/admin/media" method="POST">
+        <input type="hidden" name="screen_id" value="<%= screen.id %>" />
+        <div class="form-group">
+          <label for="url">رابط المحتوى:</label>
+          <input type="text" id="url" name="url" required />
+        </div>
+        <div class="form-group">
+          <label for="duration">مدة العرض (بالثواني):</label>
+          <input
+            type="number"
+            id="duration"
+            name="duration"
+            value="15"
+            required
+          />
+        </div>
+        <button type="submit" class="btn">إضافة محتوى</button>
+      </form>
+
+      <h2>المحتوى الحالي</h2>
+      <ul class="media-list">
+        <% mediaItems.forEach(function(media) { %>
+        <li class="media-item">
+          <strong>الرابط:</strong> <%= media.url %><br />
+          <strong>المدة:</strong> <%= media.duration %> ثانية <% if
+          (media.url.match(/\.(jpg|jpeg|png|gif)$/i)) { %>
+          <br />
+          <img src="<%= media.url %>" alt="معاينة" class="preview" />
+          <% } %>
+        </li>
+        <% }); %>
+      </ul>
+    </div>
+  </body>
+</html>

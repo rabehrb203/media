@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>لوحة التحكم بالشاشات</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        direction: rtl;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .screen-list {
+        list-style: none;
+        padding: 0;
+      }
+      .screen-item {
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      .btn {
+        background: #007bff;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background: #0056b3;
+      }
+      .table-responsive {
+        margin-top: 20px;
+      }
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+      .form-select {
+        width: 100%;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>لوحة التحكم بالشاشات</h1>
+
+      <h2>إضافة شاشة جديدة</h2>
+      <form action="/admin/screen" method="POST">
+        <div class="form-group">
+          <label for="id">معرف الشاشة:</label>
+          <input type="text" id="id" name="id" required />
+        </div>
+        <div class="form-group">
+          <label for="orientation">اتجاه الشاشة:</label>
+          <select id="orientation" name="orientation">
+            <option value="horizontal">أفقي</option>
+            <option value="vertical">عمودي</option>
+          </select>
+        </div>
+        <button type="submit" class="btn">إضافة شاشة</button>
+      </form>
+
+      <h2>قائمة الشاشات</h2>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>معرف الشاشة</th>
+              <th>الاتجاه</th>
+              <th>عنوان IP</th>
+              <th>تاريخ الإنشاء</th>
+              <th>الإجراءات</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% screens.forEach(function(screen) { %>
+              <tr>
+                <td><%= screen.id %></td>
+                <td>
+                  <select class="form-select orientation-select" data-screen-id="<%= screen.id %>">
+                    <option value="horizontal" <%= screen.orientation === 'horizontal' ? 'selected' : '' %>>أفقي</option>
+                    <option value="vertical" <%= screen.orientation === 'vertical' ? 'selected' : '' %>>عمودي</option>
+                  </select>
+                </td>
+                <td><%= screen.ip || 'غير متصل' %></td>
+                <td><%= screen.created_at %></td>
+                <td>
+                  <a href="/admin/screen/<%= screen.id %>" class="btn btn-primary btn-sm">إدارة المحتوى</a>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      document.querySelectorAll('.orientation-select').forEach(select => {
+        select.addEventListener('change', async function() {
+          const screenId = this.dataset.screenId;
+          const orientation = this.value;
+          
+          try {
+            const response = await fetch(`/api/screens/${screenId}/orientation`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ orientation })
+            });
+            
+            if (!response.ok) {
+              throw new Error('فشل تحديث اتجاه الشاشة');
+            }
+            
+            alert('تم تحديث اتجاه الشاشة بنجاح');
+          } catch (error) {
+            alert('حدث خطأ: ' + error.message);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
