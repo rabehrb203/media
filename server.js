@@ -120,6 +120,7 @@ app.post("/admin/media", (req, res) => {
 
 app.get("/screens/:screen_id/media", (req, res) => {
   const screenId = req.params.screen_id;
+
   db.all(
     "SELECT url, duration FROM media WHERE screen_id = ?",
     [screenId],
@@ -128,11 +129,25 @@ app.get("/screens/:screen_id/media", (req, res) => {
         res.status(500).json({ error: err.message });
         return;
       }
-      const mediaResponse = {
-        urls: media.map((m) => m.url),
-        duration: media[0]?.duration || 15,
-      };
-      res.json(mediaResponse);
+
+      db.get(
+        "SELECT orientation FROM screens WHERE id = ?",
+        [screenId],
+        (err2, screen) => {
+          if (err2) {
+            res.status(500).json({ error: err2.message });
+            return;
+          }
+
+          const mediaResponse = {
+            urls: media.map((m) => m.url),
+            duration: media[0]?.duration || 15,
+            orientation: screen?.orientation || "horizontal",
+          };
+
+          res.json(mediaResponse);
+        }
+      );
     }
   );
 });
