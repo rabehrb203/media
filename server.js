@@ -147,7 +147,7 @@ app.get("/api/screens/:screen_id/orientation", (req, res) => {
         res.status(500).json({ error: err.message });
         return;
       }
-      res.json(row?.orientation || "horizontal");
+      res.json({ orientation: row?.orientation || "horizontal" });
     }
   );
 });
