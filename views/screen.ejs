@@ -1,91 +1,127 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
   <head>
+    <meta charset="UTF-8" />
     <title>إدارة محتوى الشاشة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap");
       body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        direction: rtl;
-      }
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-      }
-      .media-list {
-        list-style: none;
-        padding: 0;
-      }
-      .media-item {
-        padding: 10px;
-        margin: 5px 0;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-      }
-      .form-group {
-        margin-bottom: 15px;
-      }
-      .btn {
-        background: #007bff;
-        color: white;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        text-decoration: none;
-      }
-      .btn:hover {
-        background: #0056b3;
-      }
-      .preview {
-        max-width: 200px;
-        max-height: 200px;
-        margin: 10px 0;
+        font-family: "Tajawal", sans-serif;
       }
     </style>
   </head>
-  <body>
-    <div class="container">
-      <a href="/admin" class="btn">العودة للقائمة الرئيسية</a>
-      <h1>إدارة محتوى الشاشة <%= screen.id %></h1>
-      <p>
-        <strong>الاتجاه:</strong> <%= screen.orientation %><br />
-        <strong>IP:</strong> <%= screen.ip || 'غير متصل' %>
-      </p>
+  <body class="bg-gray-50 min-h-screen py-8 px-4">
+    <div class="max-w-4xl mx-auto bg-white p-6">
+      <a
+        href="/admin"
+        class="inline-flex items-center text-indigo-600 hover:underline mb-4"
+      >
+        <i class="fas fa-arrow-right ml-2"></i> العودة للقائمة الرئيسية
+      </a>
 
-      <h2>إضافة محتوى جديد</h2>
-      <form action="/admin/media" method="POST">
-        <input type="hidden" name="screen_id" value="<%= screen.id %>" />
-        <div class="form-group">
-          <label for="url">رابط المحتوى:</label>
-          <input type="text" id="url" name="url" required />
-        </div>
-        <div class="form-group">
-          <label for="duration">مدة العرض (بالثواني):</label>
-          <input
-            type="number"
-            id="duration"
-            name="duration"
-            value="15"
-            required
-          />
-        </div>
-        <button type="submit" class="btn">إضافة محتوى</button>
-      </form>
+      <h1 class="text-2xl font-bold text-gray-800 mb-4">
+        إدارة محتوى الشاشة <%= screen.id %>
+      </h1>
 
-      <h2>المحتوى الحالي</h2>
-      <ul class="media-list">
-        <% mediaItems.forEach(function(media) { %>
-        <li class="media-item">
-          <strong>الرابط:</strong> <%= media.url %><br />
-          <strong>المدة:</strong> <%= media.duration %> ثانية <% if
-          (media.url.match(/\.(jpg|jpeg|png|gif)$/i)) { %>
-          <br />
-          <img src="<%= media.url %>" alt="معاينة" class="preview" />
+      <div class="mb-6 text-sm text-gray-600 space-y-1">
+        <div><strong>الاتجاه:</strong> <%= screen.orientation %></div>
+        <div>
+          <strong>IP:</strong>
+          <% if (screen.ip) { %>
+          <span
+            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+          >
+            <i class="fas fa-wifi ml-1"></i> <%= screen.ip %>
+          </span>
+          <% } else { %>
+          <span
+            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+          >
+            <i class="fas fa-unlink ml-1"></i> غير متصل
+          </span>
           <% } %>
-        </li>
-        <% }); %>
-      </ul>
+        </div>
+      </div>
+
+      <div class="mb-8">
+        <h2 class="text-xl font-semibold text-gray-700 mb-4">
+          إضافة محتوى جديد
+        </h2>
+        <form action="/admin/media" method="POST" class="space-y-4">
+          <input type="hidden" name="screen_id" value="<%= screen.id %>" />
+
+          <div>
+            <label
+              for="url"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >رابط المحتوى:</label
+            >
+            <input
+              type="text"
+              id="url"
+              name="url"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              required
+            />
+          </div>
+
+          <div>
+            <label
+              for="duration"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >مدة العرض (بالثواني):</label
+            >
+            <input
+              type="number"
+              id="duration"
+              name="duration"
+              value="15"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="w-full gradient-bg text-white py-2 px-4 rounded-lg hover:opacity-90 transition flex items-center justify-center space-x-2 space-x-reverse"
+          >
+            <i class="fas fa-plus"></i>
+            <span>إضافة محتوى</span>
+          </button>
+        </form>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold text-gray-700 mb-4">المحتوى الحالي</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <% mediaItems.forEach(function(media) { %>
+          <div class="bg-gray-100 rounded-lg p-4">
+            <p class="text-sm text-gray-700">
+              <strong>الرابط:</strong> <%= media.url %>
+            </p>
+            <p class="text-sm text-gray-700 mb-2">
+              <strong>المدة:</strong> <%= media.duration %> ثانية
+            </p>
+
+            <% if (media.url.match(/\.(mp4|webm)$/i)) { %>
+            <div class="text-xs text-gray-500">لا توجد معاينة متاحة</div>
+
+            <% } else { %>
+            <img
+              src="<%= media.url %>"
+              alt="معاينة"
+              class="rounded-lg w-full h-auto w-full max-h-48 object-contain border"
+            />
+            <% } %>
+          </div>
+          <% }); %>
+        </div>
+      </div>
     </div>
   </body>
 </html>

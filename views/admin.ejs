@@ -1,117 +1,132 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
   <head>
     <title>لوحة التحكم بالشاشات</title>
 
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        direction: rtl;
-      }
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-      }
-      .screen-list {
-        list-style: none;
-        padding: 0;
-      }
-      .screen-item {
-        padding: 10px;
-        margin: 5px 0;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-      }
-      .form-group {
-        margin-bottom: 15px;
-      }
-      .btn {
-        background: #007bff;
-        color: white;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-      .btn:hover {
-        background: #0056b3;
-      }
-      .table-responsive {
-        margin-top: 20px;
-      }
-      .table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      .table th, .table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-      }
-      .form-select {
-        width: 100%;
-        padding: 5px;
-      }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        .media-preview {
+            background: linear-gradient(135deg, #e0e0e0 0%, #e0e0e0 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
   </head>
-  <body>
-    <div class="container my-4">
-      <h1 class="mb-4 text-center">لوحة التحكم بالشاشات</h1>
+  <body class="bg-gray-50 min-h-screen py-8 px-4">
+      <div id="admin-dashboard" class="min-h-screen">
+  
 
-      <div class="card p-4 mb-4">
-        <h4>إضافة شاشة جديدة</h4>
-        <form>
-          <div class="mb-3">
-            <label for="id" class="form-label">معرف الشاشة</label>
-            <input type="text" id="id" class="form-control" required />
+      <div class="container mx-auto px-4 py-8">
+          <div class="bg-white rounded-xl overflow-hidden mb-8 fade-in">
+              <div class="p-6">
+                  <div class="flex items-center mb-4">
+                      <div class="bg-indigo-100 p-2 rounded-full mr-3">
+                          <i class="fas fa-plus text-indigo-600"></i>
+                      </div>
+                      <h2 class="text-xl font-semibold text-gray-800">إضافة شاشة جديدة</h2>
+                  </div>
+                  
+                  <form class="space-y-4">
+                      <div>
+                          <label for="screen-id" class="block text-sm font-medium text-gray-700 mb-1">معرف الشاشة</label>
+                          <input type="text" id="screen-id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="أدخل معرف الشاشة" required>
+                      </div>
+                      
+                      <div>
+                          <label for="orientation" class="block text-sm font-medium text-gray-700 mb-1">اتجاه الشاشة</label>
+                          <select id="orientation" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                              <option value="horizontal">أفقي</option>
+                              <option value="vertical">عمودي</option>
+                          </select>
+                      </div>
+                      
+                      <button type="submit" class="w-full gradient-bg text-white py-2 px-4 rounded-lg hover:opacity-90 transition flex items-center justify-center space-x-2 space-x-reverse">
+                          <i class="fas fa-plus"></i>
+                          <span>إضافة شاشة</span>
+                      </button>
+                  </form>
+              </div>
           </div>
-          <div class="mb-3">
-            <label for="orientation" class="form-label">اتجاه الشاشة</label>
-            <select id="orientation" class="form-select">
-              <option value="horizontal">أفقي</option>
-              <option value="vertical">عمودي</option>
-            </select>
+
+          <div class="bg-white rounded-xl overflow-hidden">
+              <div class="p-6">
+                  <div class="flex items-center justify-between mb-6">
+                      <div class="flex items-center">
+                          <div class="bg-indigo-100 p-2 rounded-full mr-3">
+                              <i class="fas fa-desktop text-indigo-600"></i>
+                          </div>
+                          <h2 class="text-xl font-semibold text-gray-800">قائمة الشاشات</h2>
+                      </div>
+                      <div class="relative">
+                          <input type="text" placeholder="بحث..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                          <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+                      </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <% screens.forEach(function(screen) { %>
+                      <div class="bg-white rounded-xl  p-4 flex flex-col space-y-3 media-preview">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                          <div class="bg-indigo-100 p-3 rounded-full">
+                            <i class="fas fa-desktop text-indigo-600 text-xl"></i>
+                          </div>
+                          <div class="text-lg font-semibold text-gray-800"><%= screen.id %></div>
+                        </div>
+                  
+                        <div class="flex items-center space-x-2 space-x-reverse text-sm text-gray-600">
+                          <span class="font-medium">الاتجاه:</span>
+                          <select class="orientation-select bg-gray-100 border border-gray-300 text-gray-700 py-1 px-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" data-screen-id="<%= screen.id %>">
+                            <option value="horizontal" <%= screen.orientation === 'horizontal' ? 'selected' : '' %>>أفقي</option>
+                            <option value="vertical" <%= screen.orientation === 'vertical' ? 'selected' : '' %>>عمودي</option>
+                          </select>
+                        </div>
+                  
+                        <div class="text-sm text-gray-600 flex items-center space-x-2 space-x-reverse">
+                          <span class="font-medium">عنوان IP:</span>
+                          <% if(screen.ip) { %>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                              <i class="fas fa-wifi mr-1"></i><%= screen.ip %>
+                            </span>
+                          <% } else { %>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                              <i class="fas fa-unlink mr-1"></i> غير متصل
+                            </span>
+                          <% } %>
+                        </div>
+                  
+                        <div class="text-sm text-gray-600 flex items-center space-x-2 space-x-reverse">
+                          <i class="far fa-calendar-alt text-gray-400"></i>
+                          <span><%= screen.created_at %></span>
+                        </div>
+                  
+                        <div class="text-sm font-medium mt-auto text-right">
+                          <a href="/admin/screen/<%= screen.id %>" class="text-indigo-600 hover:text-indigo-900">
+                            <i class="fas fa-edit mr-1"></i> إدارة المحتوى
+                          </a>
+                        </div>
+                      </div>
+                    <% }); %>
+                  </div>
+                  
+              </div>
           </div>
-          <button class="btn btn-primary">إضافة شاشة</button>
-        </form>
       </div>
-      <h2>قائمة الشاشات</h2>
-      <div class="table-responsive">
-        <table class="table table-hover text-center">
-          <thead class="table-light">
-            <tr>
-              <th>معرف الشاشة</th>
-              <th>الاتجاه</th>
-              <th>عنوان IP</th>
-              <th>تاريخ الإنشاء</th>
-              <th>الإجراءات</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% screens.forEach(function(screen) { %>
-              <tr>
-                <td><%= screen.id %></td>
-                <td>
-                  <select class="form-select orientation-select" data-screen-id="<%= screen.id %>">
-                    <option value="horizontal" <%= screen.orientation === 'horizontal' ? 'selected' : '' %>>أفقي</option>
-                    <option value="vertical" <%= screen.orientation === 'vertical' ? 'selected' : '' %>>عمودي</option>
-                  </select>
-                </td>
-                <td><%= screen.ip || 'غير متصل' %></td>
-                <td><%= screen.created_at %></td>
-                <td>
-                  <a href="/admin/screen/<%= screen.id %>" class="btn btn-primary btn-sm">إدارة المحتوى</a>
-                </td>
-              </tr>
-            <% }); %>
-          </tbody>
-        </table>
-      </div>
-    </div>
+  </div>  
 
     <script>
       document.querySelectorAll('.orientation-select').forEach(select => {
